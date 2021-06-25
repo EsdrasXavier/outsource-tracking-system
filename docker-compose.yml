@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  dicorvery-service:
+    build:
+      context: discovery-service
+      dockerfile: Dockerfile
+    image: ots-discovery-service:latest
+    container_name: ots-discovery-service
+    ports:
+      - "8761:8761"
