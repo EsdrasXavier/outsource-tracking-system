@@ -1,10 +1,28 @@
 version: "3.9"
 services:
   dicorvery-service:
+    restart: always
     build:
       context: discovery-service
       dockerfile: Dockerfile
     image: ots-discovery-service:latest
     container_name: ots-discovery-service
     ports:
-      - "8761:8761"
+      - 8761:8761
+
+  user-service-database:
+    restart: always
+    image: postgres:13.1
+    container_name: "ots-user-service-database"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "user-service" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    environment:
+      - POSTGRES_USER=user-service
+      - POSTGRES_PASSWORD=user-service
+      - POSTGRES_DB=user-service
+    ports:
+      - 5435:5432
+    restart: unless-stopped
